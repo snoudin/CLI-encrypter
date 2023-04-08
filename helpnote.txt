@@ -1,1 +1,8 @@
-Some text to show in help
+Weclone to CLI-encrypter!
+
+Here are some basic options to use from start:
+decode / d - use it to decode files and follow instructions you get
+encode / e - use it to encode files and follow instructions you get
+bruteforce / b / crack / c - use it to bruteforce encoding. Not every cipher can be cracked, so don't wait too much
+help / h for seeing this message again
+q / quit / exit for finishing work

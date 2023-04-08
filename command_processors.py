@@ -17,7 +17,7 @@ def get_algo():
     print("Possible names are:\n", *algorithm_list, sep='')
     algo = input()
     while algo.lower() not in [name.lower() for name in algorithm_list]:
-        print(f"Incorrect algorithm name. Possible names are:\n", *algorithm_list, sep='')
+        print(f"Incorrect algorithm name. Possible names are:\n", ' '.join(algorithm_list), sep='')
         algo = input()
     return algo
 

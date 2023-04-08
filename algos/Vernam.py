@@ -47,9 +47,10 @@ def get_key_from_file():
     while not filename:
         filename = input()
         try:
-            return open(filename, 'r').read()
+            data = open(filename, 'r').read()
+            assert(len(data) > 0)
         except Exception:
-            print('Bad filename, try again')
+            print('Bad file, try again')
             filename = ''
 
 
