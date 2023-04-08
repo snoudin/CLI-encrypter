@@ -41,13 +41,44 @@ def decode(filename, key):
         return xor(data, key)
 
 
-def get_key():  # TODO: choose key input method
+def get_key_from_file():
+    print('input name of file with key')
+    filename = ''
+    while not filename:
+        filename = input()
+        try:
+            return open(filename, 'r').read()
+        except Exception:
+            print('Bad filename, try again')
+            filename = ''
+
+
+def get_key_from_console():
+    print('input key')
     key = ""
     while not key:
         key = input()
         if not key:
             print("key must have some letters in it")
     return key
+
+
+def get_key():
+    print("Choose key input method:"
+          "1 for input from console"
+          "2 for input from file")
+    method = 0
+    while not method:
+        try:
+            method = int(input())
+            assert(method > 0)
+            assert(method < 3)
+        except ValueError or AssertionError:
+            print('Bad key input option, try again')
+    if method == 1:
+        return get_key_from_console()
+    else:
+        return get_key_from_file()
 
 
 def process_decode(filename):

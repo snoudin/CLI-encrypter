@@ -68,10 +68,10 @@ def get_value(bits):
     while not res:
         try:
             res = int(input())
-            if res < 1 or res >= 2 ** bits:
-                print('Must be integer between 0 and 2^bits')
-        except ValueError:
-            print('Must be integer > 0')
+            assert(res > 0)
+            assert(res < 2 ** bits)
+        except ValueError or AssertionError:
+            print('Must be integer between 0 and 2^bits')
     return res
 
 
