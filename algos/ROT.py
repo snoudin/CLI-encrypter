@@ -1,3 +1,6 @@
+from choosers import statistical
+
+
 def rotate(data, shift, rules):
     to_shift = [False] * 3
     for rule in rules.split(','):
@@ -53,6 +56,14 @@ def decode(filename, shift, rules="letters"):
         return rotate(data, -1 * shift, rules)
 
 
+def bruteforce(filename, rules='letters'):
+    with open(filename, 'r', encoding='utf-8') as input_file:
+        options = [None for _ in range(78)]
+        for shift in range(26):
+            options[shift] = decode(input_file.read(), shift, rules)
+        return statistical(options)
+
+
 def get_shift():
     print('Now I need rotation number (how much to shift letters to the right).'
           'It also can be negative, but can\'t be a zero')
@@ -99,15 +110,7 @@ def process_encode(filename):
     return encode(filename, shift, rules)
 
 
-def bruteforce(filename):
-    """
-    Not implemented yet
-    """
-    return None  # TODO
-
-
 def process_bruteforce(filename):
-    """
-    Not implemented yet
-    """
-    return None  # TODO
+    rules = get_rules()
+    return bruteforce(filename, rules)
+
