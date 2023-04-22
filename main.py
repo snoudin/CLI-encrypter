@@ -1,4 +1,5 @@
 from command_processors import *
+from interface_processor import interface_processor
 
 if __name__ == '__main__':
     running = True
@@ -17,6 +18,9 @@ if __name__ == '__main__':
                 running = False
         elif command in ['c', 'crack', 'b', 'bruteforce']:
             if not bruteforce_processor():
+                running = False
+        elif command in ['i', 'interface']:
+            if not interface_processor():
                 running = False
         else:
             print('Unknown command\n'

@@ -1,3 +1,5 @@
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 from choosers import statistical
 
 
@@ -21,6 +23,8 @@ def rotate(data, shift, rules):
                 res += chr(ord('a') + (ord(character) - ord('a') + shift) % 26)
         elif to_shift[1] and character.isdigit():
             res += chr(ord('0') + (ord(character) - ord('0') + shift) % 10)
+        else:
+            res += character
     return res
 
 
@@ -113,4 +117,25 @@ def process_encode(filename):
 def process_bruteforce(filename):
     rules = get_rules()
     return bruteforce(filename, rules)
+    
 
+class EncodeWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        #input fields
+        
+        
+
+class DecodeWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        #input fields
+        
+        
+
+class BruteforceWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        

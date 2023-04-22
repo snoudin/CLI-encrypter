@@ -1,3 +1,7 @@
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+
+
 def rotate(data, key):
     res = ""
     for (c, ind) in enumerate(data):
@@ -73,3 +77,29 @@ def process_bruteforce(filename):
     Not implemented yet
     """
     return None  # TODO
+    
+
+class EncodeWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        #input fields
+        
+        
+
+class DecodeWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        #input fields
+        
+        
+        
+
+class BruteforceWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        txt = QLabel(self)
+        txt.setText('Not implemented!')
+        txt.setGeometry(200, 290, 200, 20)
+

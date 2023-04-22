@@ -1,3 +1,7 @@
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
 def xor(data, bits, value):
     if len(data) * 8 % bits:
         raise ValueError
@@ -99,3 +103,90 @@ def process_bruteforce(filename):
     Not implemented yet
     """
     return None  # TODO
+
+
+class EncodeWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        #input fields
+        txt1 = QLabel(self)
+        txt1.setText('bits')
+        txt2 = QLabel(self)
+        txt2.setText('value')
+
+        bits = QLineEdit(self)
+        value = QLineEdit(self)
+        txt1.setGeometry(20, 20, 100, 25)
+        txt2.setGeometry(20, 80, 100, 25)
+        bits.setGeometry(20, 50, 100, 20)
+        value.setGeometry(20, 110, 100, 20)
+        bits.setValidator(QIntValidator())
+        value.setValidator(QIntValidator())
+        
+        #input file
+        def input():
+            self.input = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename1.setText(self.input)
+
+        txt3 = QLabel(self)
+        txt3.setText('input file name')
+        txt3.setGeometry(20, 160, 200, 20)
+        self.filename1 = QLineEdit(self)
+        self.filename1.setGeometry(20, 190, 300, 30)
+        self.filename1.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 230, 300, 50)
+        file_btn.clicked.connect(input)
+        file_btn.setText('choose input file')
+
+        #output file
+        def output():
+            self.output = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename2.setText(self.output)
+
+        txt3 = QLabel(self)
+        txt3.setText('output file name')
+        txt3.setGeometry(20, 300, 200, 20)
+        self.filename2 = QLineEdit(self)
+        self.filename2.setGeometry(20, 340, 300, 30)
+        self.filename2.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 380, 300, 50)
+        file_btn.clicked.connect(output)
+        file_btn.setText('choose output file')
+        
+        #work
+        def run():
+            pass #TODO
+
+        btn = QPushButton(self)
+        btn.setGeometry(20, 450, 100, 50)
+        btn.setText('Encode')
+        btn.clicked.connect(run)
+
+
+class DecodeWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        #input fields
+        txt1 = QLabel(self)
+        txt1.setText('bits')
+        txt2 = QLabel(self)
+        txt2.setText('value')
+
+        bits = QLineEdit(self)
+        value = QLineEdit(self)
+        txt1.setGeometry(20, 20, 100, 25)
+        txt2.setGeometry(20, 100, 100, 25)
+        bits.setGeometry(20, 60, 100, 20)
+        value.setGeometry(20, 140, 100, 20)
+        
+
+class BruteforceWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        txt = QLabel(self)
+        txt.setText('Not implemented!')
+        txt.setGeometry(200, 290, 200, 20)
