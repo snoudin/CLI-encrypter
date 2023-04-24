@@ -1,6 +1,6 @@
 from os.path import isfile
 from settings import *
-exec(f"from algos import {', '.join(algorithm_list)}")
+exec(f"from algos import {', '.join(cli_algorithm_list)}")
 
 
 def get_file():
@@ -14,10 +14,10 @@ def get_file():
 
 
 def get_algo():
-    print("Possible names are:\n", '\t'.join(algorithm_list), sep='')
+    print("Possible names are:\n", '\t'.join(cli_algorithm_list), sep='')
     algo = input()
-    while algo.lower() not in [name.lower() for name in algorithm_list]:
-        print(f"Incorrect algorithm name. Possible names are:\n", '\t'.join(algorithm_list), sep='')
+    while algo.lower() not in [name.lower() for name in cli_algorithm_list]:
+        print(f"Incorrect algorithm name. Possible names are:\n", '\t'.join(cli_algorithm_list), sep='')
         algo = input()
     return algo
 
@@ -83,3 +83,4 @@ def bruteforce_processor():
     except TypeError:
         print('Unbreakable algorithm')
     return True  # TODO
+
