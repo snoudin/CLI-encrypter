@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from choosers import statistical
 
 
@@ -61,11 +62,10 @@ def decode(filename, shift, rules="letters"):
 
 
 def bruteforce(filename, rules='letters'):
-    with open(filename, 'r', encoding='utf-8') as input_file:
-        options = [None for _ in range(78)]
-        for shift in range(26):
-            options[shift] = decode(input_file.read(), shift, rules)
-        return statistical(options)
+    options = [None for _ in range(26)]
+    for shift in range(26):
+        options[shift] = decode(filename, shift, rules)
+    return statistical(options)
 
 
 def get_shift():
@@ -124,18 +124,198 @@ class EncodeWidget(QWidget):
         super().__init__()
 
         #input fields
+        txt1 = QLabel(self)
+        txt1.setText('rotation')
+        rotation = QLineEdit(self)
+        txt1.setGeometry(20, 20, 100, 25)
+        rotation.setGeometry(20, 50, 100, 20)
+        rotation.setValidator(QIntValidator())
+
+        txt2 = QLabel(self)
+        txt2.setText('characters to rotate')
+        txt2.setGeometry(300, 20, 300, 25)
         
+        options = [QRadioButton('letters', self), QRadioButton('digits', self), \
+                  QRadioButton('letters and digits', self), QRadioButton('all', self)]
+        self.group = QButtonGroup(self)
+        for (ind, opt) in enumerate(options):
+            self.group.addButton(opt)
+            opt.setGeometry(300, 60 + 30 * ind, 200, 25)
+        self.rules = ['letters', 'digits', 'letters,digits', 'all']
         
+        #input file
+        def input():
+            self.input = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename1.setText(self.input)
+
+        txt3 = QLabel(self)
+        txt3.setText('input file name')
+        txt3.setGeometry(20, 160, 200, 20)
+        self.filename1 = QLineEdit(self)
+        self.filename1.setGeometry(20, 190, 300, 30)
+        self.filename1.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 230, 300, 50)
+        file_btn.clicked.connect(input)
+        file_btn.setText('choose input file')
+
+        #output file
+        def output():
+            self.output = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename2.setText(self.output)
+
+        txt4 = QLabel(self)
+        txt4.setText('output file name')
+        txt4.setGeometry(20, 300, 200, 20)
+        self.filename2 = QLineEdit(self)
+        self.filename2.setGeometry(20, 340, 300, 30)
+        self.filename2.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 380, 300, 50)
+        file_btn.clicked.connect(output)
+        file_btn.setText('choose output file')
+        
+        #work
+        def run():
+            if not rotation.text() or not self.input or not self.output or self.group.checkedId() == -1:
+                return
+            with open(self.output, 'w') as file:
+                print(encode(self.input, int(rotation.text()), self.rules[-2 - self.group.checkedId()]), file=file)
+
+        btn = QPushButton(self)
+        btn.setGeometry(20, 450, 100, 50)
+        btn.setText('Encode')
+        btn.clicked.connect(run)
+
 
 class DecodeWidget(QWidget):
     def __init__(self):
         super().__init__()
 
         #input fields
+        txt1 = QLabel(self)
+        txt1.setText('rotation')
+        rotation = QLineEdit(self)
+        txt1.setGeometry(20, 20, 100, 25)
+        rotation.setGeometry(20, 50, 100, 20)
+        rotation.setValidator(QIntValidator())
+
+        txt2 = QLabel(self)
+        txt2.setText('characters to rotate')
+        txt2.setGeometry(300, 20, 300, 25)
         
+        options = [QRadioButton('letters', self), QRadioButton('digits', self), \
+                  QRadioButton('letters and digits', self), QRadioButton('all', self)]
+        self.group = QButtonGroup(self)
+        for (ind, opt) in enumerate(options):
+            self.group.addButton(opt)
+            opt.setGeometry(300, 60 + 30 * ind, 200, 25)
+        self.rules = ['letters', 'digits', 'letters,digits', 'all']
+        
+        #input file
+        def input():
+            self.input = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename1.setText(self.input)
+
+        txt3 = QLabel(self)
+        txt3.setText('input file name')
+        txt3.setGeometry(20, 160, 200, 20)
+        self.filename1 = QLineEdit(self)
+        self.filename1.setGeometry(20, 190, 300, 30)
+        self.filename1.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 230, 300, 50)
+        file_btn.clicked.connect(input)
+        file_btn.setText('choose input file')
+
+        #output file
+        def output():
+            self.output = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename2.setText(self.output)
+
+        txt4 = QLabel(self)
+        txt4.setText('output file name')
+        txt4.setGeometry(20, 300, 200, 20)
+        self.filename2 = QLineEdit(self)
+        self.filename2.setGeometry(20, 340, 300, 30)
+        self.filename2.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 380, 300, 50)
+        file_btn.clicked.connect(output)
+        file_btn.setText('choose output file')
+        
+        #work
+        def run():
+            if not rotation.text() or not self.input or not self.output or self.group.checkedId() == -1:
+                return
+            with open(self.output, 'w') as file:
+                print(decode(self.input, int(rotation.text()), self.rules[-2 - self.group.checkedId()]), file=file)
+
+        btn = QPushButton(self)
+        btn.setGeometry(20, 450, 100, 50)
+        btn.setText('Decode')
+        btn.clicked.connect(run)
+
+   
         
 
 class BruteforceWidget(QWidget):
     def __init__(self):
         super().__init__()
+        txt2 = QLabel(self)
+        txt2.setText('characters to rotate')
+        txt2.setGeometry(20, 20, 300, 25)
         
+        options = [QRadioButton('letters', self), QRadioButton('digits', self), \
+                  QRadioButton('letters and digits', self), QRadioButton('all', self)]
+        self.group = QButtonGroup(self)
+        for (ind, opt) in enumerate(options):
+            self.group.addButton(opt)
+            opt.setGeometry(20, 60 + 30 * ind, 200, 25)
+        self.rules = ['letters', 'digits', 'letters,digits', 'all']
+        
+        #input file
+        def input():
+            self.input = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename1.setText(self.input)
+
+        txt3 = QLabel(self)
+        txt3.setText('input file name')
+        txt3.setGeometry(20, 200, 200, 20)
+        self.filename1 = QLineEdit(self)
+        self.filename1.setGeometry(20, 230, 300, 30)
+        self.filename1.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 270, 300, 50)
+        file_btn.clicked.connect(input)
+        file_btn.setText('choose input file')
+
+        #output file
+        def output():
+            self.output = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename2.setText(self.output)
+
+        txt4 = QLabel(self)
+        txt4.setText('output file name')
+        txt4.setGeometry(20, 340, 200, 20)
+        self.filename2 = QLineEdit(self)
+        self.filename2.setGeometry(20, 380, 300, 30)
+        self.filename2.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 420, 300, 50)
+        file_btn.clicked.connect(output)
+        file_btn.setText('choose output file')
+        
+        #work
+        def run():
+            if not self.input or not self.output or self.group.checkedId() == -1:
+                return
+            with open(self.output, 'w') as file:
+                print(bruteforce(self.input, self.rules[-2 - self.group.checkedId()]), file=file)
+
+        btn = QPushButton(self)
+        btn.setGeometry(20, 490, 100, 50)
+        btn.setText('Crack!')
+        btn.clicked.connect(run)
+
+

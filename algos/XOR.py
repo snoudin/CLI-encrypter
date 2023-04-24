@@ -13,7 +13,6 @@ def xor(data, bits, value):
         xored = value ^ int(block, 2)
         temp = bin(xored)[2:]
         xored_binary += '0' * (8 - len(temp)) + temp
-    print(xored_binary)
     return ''.join([chr(int(xored_binary[i * 8: (i + 1) * 8], 2)) for i in range(len(data))])
 
 
@@ -145,9 +144,9 @@ class EncodeWidget(QWidget):
             self.output = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
             self.filename2.setText(self.output)
 
-        txt3 = QLabel(self)
-        txt3.setText('output file name')
-        txt3.setGeometry(20, 300, 200, 20)
+        txt4 = QLabel(self)
+        txt4.setText('output file name')
+        txt4.setGeometry(20, 300, 200, 20)
         self.filename2 = QLineEdit(self)
         self.filename2.setGeometry(20, 340, 300, 30)
         self.filename2.setReadOnly(True)
@@ -158,7 +157,10 @@ class EncodeWidget(QWidget):
         
         #work
         def run():
-            pass #TODO
+            if not bits.text() or not value.text() or not self.input or not self.output:
+                return
+            with open(self.output, 'w') as file:
+                print(encode(self.input, int(bits.text()), int(value.text())), file=file)
 
         btn = QPushButton(self)
         btn.setGeometry(20, 450, 100, 50)
@@ -179,10 +181,57 @@ class DecodeWidget(QWidget):
         bits = QLineEdit(self)
         value = QLineEdit(self)
         txt1.setGeometry(20, 20, 100, 25)
-        txt2.setGeometry(20, 100, 100, 25)
-        bits.setGeometry(20, 60, 100, 20)
-        value.setGeometry(20, 140, 100, 20)
+        txt2.setGeometry(20, 80, 100, 25)
+        bits.setGeometry(20, 50, 100, 20)
+        value.setGeometry(20, 110, 100, 20)
+        bits.setValidator(QIntValidator())
+        value.setValidator(QIntValidator())
         
+        #input file
+        def input():
+            self.input = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename1.setText(self.input)
+
+        txt3 = QLabel(self)
+        txt3.setText('input file name')
+        txt3.setGeometry(20, 160, 200, 20)
+        self.filename1 = QLineEdit(self)
+        self.filename1.setGeometry(20, 190, 300, 30)
+        self.filename1.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 230, 300, 50)
+        file_btn.clicked.connect(input)
+        file_btn.setText('choose input file')
+
+        #output file
+        def output():
+            self.output = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename2.setText(self.output)
+
+        txt4 = QLabel(self)
+        txt4.setText('output file name')
+        txt4.setGeometry(20, 300, 200, 20)
+        self.filename2 = QLineEdit(self)
+        self.filename2.setGeometry(20, 340, 300, 30)
+        self.filename2.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 380, 300, 50)
+        file_btn.clicked.connect(output)
+        file_btn.setText('choose output file')
+        
+        #work
+        def run():
+            if not bits.text() or not value.text() or not self.input or not self.output:
+                return
+            with open(self.output, 'w') as file:
+                print(decode(self.input, int(bits.text()), int(value.text())), file=file)
+
+        btn = QPushButton(self)
+        btn.setGeometry(20, 450, 100, 50)
+        btn.setText('Decode')
+        btn.clicked.connect(run)
+
+       
 
 class BruteforceWidget(QWidget):
     def __init__(self):
