@@ -171,10 +171,17 @@ class EncodeWidget(QWidget):
         
         #work
         def run(): # TODO
-            if not key.text() or not self.input or not self.output:
+            if not self.input or not self.output:
+                return
+            value = ""
+            if opt1.isChecked():
+                value = key.text()
+            else:
+                value = open(self.key, 'r').read()
+            if not value:
                 return
             with open(self.output, 'w') as file:
-                print(encode(self.input, key.text()), file=file)
+                print(encode(self.input, value), file=file)
 
         btn = QPushButton(self)
         btn.setGeometry(20, 490, 100, 50)
@@ -187,8 +194,87 @@ class DecodeWidget(QWidget):
         super().__init__()
 
         #input fields
+        txt1 = QLabel(self)
+        txt1.setText('write key here')
+        key = QLineEdit(self)
+        txt1.setGeometry(20, 80, 200, 25)
+        key.setGeometry(20, 110, 200, 30)
         
+        opt1 = QRadioButton('paste key here', self)
+        opt2 = QRadioButton('load key from file', self)
+        group = QButtonGroup(self)
+        group.addButton(opt1)
+        group.addButton(opt2)
+        opt1.setGeometry(20, 20, 200, 25)
+        opt2.setGeometry(300, 20, 200, 25)
         
+        txt2 = QLabel(self)
+        txt2.setText('choose file with key here')
+        txt2.setGeometry(300, 80, 200, 25)
+        self.keyfile = QLineEdit(self)
+        self.keyfile.setGeometry(300, 110, 260, 30)
+        self.keyfile.setReadOnly(True)
+
+        def key():
+            self.key = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.keyfile.setText(self.key)
+
+        key_btn = QPushButton(self)
+        key_btn.setGeometry(300, 150, 260, 40)
+        key_btn.clicked.connect(key)
+        key_btn.setText('choose file with key')
+
+        #input file
+        def input():
+            self.input = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename1.setText(self.input)
+
+        txt3 = QLabel(self)
+        txt3.setText('input file name')
+        txt3.setGeometry(20, 200, 200, 20)
+        self.filename1 = QLineEdit(self)
+        self.filename1.setGeometry(20, 230, 300, 30)
+        self.filename1.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 270, 300, 50)
+        file_btn.clicked.connect(input)
+        file_btn.setText('choose input file')
+
+        #output file
+        def output():
+            self.output = QFileDialog.getOpenFileName(self, 'OpenFile')[0]
+            self.filename2.setText(self.output)
+
+        txt4 = QLabel(self)
+        txt4.setText('output file name')
+        txt4.setGeometry(20, 340, 200, 20)
+        self.filename2 = QLineEdit(self)
+        self.filename2.setGeometry(20, 380, 300, 30)
+        self.filename2.setReadOnly(True)
+        file_btn = QPushButton(self)
+        file_btn.setGeometry(20, 420, 300, 50)
+        file_btn.clicked.connect(output)
+        file_btn.setText('choose output file')
+        
+        #work
+        def run(): # TODO
+            if not self.input or not self.output:
+                return
+            value = ""
+            if opt1.isChecked():
+                value = key.text()
+            else:
+                value = open(self.key, 'r').read()
+            if not value:
+                return
+            with open(self.output, 'w') as file:
+                print(decode(self.input, value), file=file)
+
+        btn = QPushButton(self)
+        btn.setGeometry(20, 490, 100, 50)
+        btn.setText('Decode')
+        btn.clicked.connect(run)
+     
 
 class BruteforceWidget(QWidget):
     def __init__(self):
